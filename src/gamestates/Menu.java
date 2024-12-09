@@ -17,17 +17,17 @@ public class Menu extends State implements Statemethods {
 	// TODO: create ints for menuX, menuY, menuWidth, menuHeight
 
 	public Menu(Game game) {
-		// TODO: call super passing in game
-		// TODO: call loadButtons()
-		// TODO: call loadBackground();
+		super(game);
+		loadButtons();
+		loadBackground();
 	}
 
 	private void loadBackground() {
-		// TODO: set backgroundImg to LoadSave.GetSpriteAtlas(LoadSave.MENU_BACKGROUND)0
-		// TODO: set menuWidth to (int) (backgroundImg.getWidth()  * Game.SCALE
-		// TODO: set menuHeight to (int) (backgroundImg.getHeight() * Game.SCALE
-		// TODO: set menuX to Game.GAME_WIDTH / 2 - menuWidth / 2
-		// TODO: set menuY to (int) (45 * Game.SCALE)
+		backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.MENU_BACKGROUND)0;
+		menuWidth = (int) (backgroundImg.getWidth()  * Game.SCALE;
+		menuHeight = (int) (backgroundImg.getHeight() * Game.SCALE;
+		menuX = Game.GAME_WIDTH / 2 - menuWidth / 2;
+		menuY = (int) (45 * Game.SCALE);
 	}
 
 	private void loadButtons() {

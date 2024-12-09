@@ -33,8 +33,8 @@ public class GamePanel extends JPanel {
 	}
 
 	public void paintComponent(Graphics g) {
-		// TODO: call super.paintComponent(g)
-		// TODO: call game.render passing in g
+		super.paintComponent(g);
+		game.render(g);
 	}
 
 	public Game getGame() {

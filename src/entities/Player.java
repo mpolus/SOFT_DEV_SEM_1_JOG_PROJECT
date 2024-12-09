@@ -31,7 +31,8 @@ public class Player extends Entity {
     public Player(float x, float y, int width, int height) {
         super(x, y, width, height);
         loadAnimations();
-        // TODO: call initHitbox passing in x, y, (int) (20 * Game.SCALE), (int) (27 * Game.SCALE)
+        initHitbox( x, y, (int) (20 * Game.SCALE), (int) (27 * Game.SCALE));
+
     }
 
     public void update() {
@@ -41,7 +42,7 @@ public class Player extends Entity {
     }
 
     public void render(Graphics g) {
-        // TODO: call g.drawImage passing in animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset), (int)(hitbox.y - YDrawOffset), width, height, null)
+        g.drawImage(animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset), (int)(hitbox.y - YDrawOffset), width, height, null);
     }
 
     private void updateAnimationTick() {
@@ -62,6 +63,8 @@ public class Player extends Entity {
             playerAction = RUNNING;
         else
             playerAction = IDLE;
+        if (inAir)
+
 
         // TODO: if inAir
         // TODO: if airSpeed is less than 0
@@ -169,10 +172,35 @@ public class Player extends Entity {
         this.left = left;
     }
 
+    public boolean isUp() {
+        return up;
+    }
+
+    public void setUp(boolean up) {
+        this.up = up;
+    }
+
+    public boolean isDown() {
+        return down;
+    }
+
+    public void setDown(boolean down) {
+        this.down = down;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public void setRight(boolean right) {
+            this.right = right;
+    }
+
     // TODO: repeat for Up, Down, Right for previous 2
 
 
     public void setJump(boolean jump) {
+        jump = jump;
         // TODO: set this jump to jump.
     }
 
