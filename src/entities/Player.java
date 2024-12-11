@@ -63,7 +63,11 @@ public class Player extends Entity {
             playerAction = RUNNING;
         else
             playerAction = IDLE;
-        if (inAir)
+        if (inAir) {
+            if (airSpeed < 0)
+                playerAction = JUMP;
+        }else
+            playerAction = FALLING
 
 
         // TODO: if inAir
@@ -86,16 +90,31 @@ public class Player extends Entity {
 
     private void updatePos() {
         moving = false;
+        if (jump) {
+            jump();
+        }
+        if (left != right != inAir) {
+            return;
+        }
 
         // TODO: if jump
         // TODO: call jump()
         // TODO: if not left and not right and not inAir
         // TODO: return
 
-        // create a float called xSpeed and set to 0
 
+        float xSpeed = 0;
+        // create a float called xSpeed and set to 0
+        if (left) {
+            xSpeed -= playerSpeed;
+        }
+        if (right) {
+            xSpeed += playerSpeed;
+        }
         // TODO: if left subtract playerSpeed from xSpeed
         // TODO: if right add playerSpeed to xSpeed
+
+
 
 
         // TODO: if not inAir

@@ -8,8 +8,8 @@ public abstract class Entity {
 
     protected float x, y;
     protected int width, height;
-    Rectangle2D.Float hitbox;
     protected Rectangle2D.Float hitbox;
+
 
     public Entity(float x, float y, int width, int height) {
         this.x = x;
@@ -29,7 +29,7 @@ public abstract class Entity {
     }
 
     public Rectangle2D.Float getHitbox() {
-		// TODO: return this hitbox.
+		return hitbox;
     }
 
 }
