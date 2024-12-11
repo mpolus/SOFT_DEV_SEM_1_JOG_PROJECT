@@ -47,7 +47,7 @@ public class Menu extends State implements Statemethods {
 	public void draw(Graphics g) {
 		// TODO: g.drawImage passing in
 		// backgroundImg, menuX, menuY, menuWidth, menuHeight, null
-		// TODO: for each MenuButton mb in loadButtons()
+		// TODO: for each MenuButton mb in Buttons()
 		// TODO: call mb.draw(g)
 	}
 

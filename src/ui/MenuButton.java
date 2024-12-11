@@ -18,6 +18,12 @@ public class MenuButton {
 	// TODO: Rectangle bounds
 
 	public MenuButton(int xPos, int yPos, int rowIndex, Gamestate state) {
+		this.xPos = xPos;
+		this.yPos = yPos;
+		this.rowIndex = rowIndex;
+		this.state = state;
+		loadImgs();
+		initBounds();
 		// TODO: set this xPos to xPos
 		// TODO: set this yPos to yPos
 		// TODO: set this rowIndex to rowIndex
@@ -27,7 +33,7 @@ public class MenuButton {
 	}
 
 	private void initBounds() {
-		// TODO: set bounds to newRectangle(xPos - xOffsetCenter, yPos, B_WIDTH, B_HEIGHT)
+		bounds = newRectangle(xPos - xOffsetCenter, yPos, B_WIDTH, B_HEIGHT);
 	}
 
 	private void loadImgs() {
@@ -38,12 +44,18 @@ public class MenuButton {
 	}
 
 	public void draw(Graphics g) {
-		// TODO: call g.drawImage passing in
-		// TODO: imgs[index], xPos - xOffsetCenter, yPos, B_WIDTH, B_HEIGHT, null)
+		g.drawImage(imgs[index], xPos - xOffsetCenter, yPos, B_WIDTH, B_HEIGHT, null);
 
 	}
 
 	public void update() {
+		index = 0;
+		if (isMouseOver()) {
+			index = 1;
+		}
+		if (isMousePressed()) {
+			index = 2;
+		}
 		// TODO: set index to 0
 		// TODO if mouseOver
 		// TODO: set index to 1
@@ -53,31 +65,31 @@ public class MenuButton {
 	}
 
 	public boolean isMouseOver() {
-		// TODO: return mouseOver
+		return mouseOver;
 	}
 
 	public void setMouseOver(boolean mouseOver) {
-		// TODO: set this mouseOver to mouseOver
+		this.mouseOver = mouseOver;
 	}
 
 	public boolean isMousePressed() {
-		// TODO: return mousePressed
+		return mousePressed;
 	}
 
 	public void setMousePressed(boolean mousePressed) {
-		// TODO: set this mousePressed to mousePressed
+		this.mousePressed = mousePressed;
 	}
 
 	public Rectangle getBounds() {
-		// TODO: return bounds
+		return bounds;
 	}
 
 	public void applyGamestate() {
-		// TODO: set Gamestate.state to state
+		Gamestate.state = state;
 	}
 
 	public void resetBools() {
-		// set mouseOver and mousePressed to false
+		mouseOver, mousePressed = false;
 	}
 
 }

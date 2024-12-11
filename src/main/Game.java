@@ -6,6 +6,8 @@ import gamestates.Gamestate;
 import gamestates.Menu;
 import gamestates.Playing;
 
+import static java.awt.SystemColor.menu;
+
 public class Game implements Runnable {
 
     private GameWindow gameWindow;
@@ -13,6 +15,10 @@ public class Game implements Runnable {
     private Thread gameThread;
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;
+
+    private Playing playing;
+    private Menu menu;
+
 
     // TODO: create a private field of type Playing named playing.
     // TODO: create a private field of type Menu named menu
@@ -39,6 +45,8 @@ public class Game implements Runnable {
     }
 
     private void initClasses() {
+        menu = new Menu(this);
+        playing = new Playing(this);
         // TODO: set menu to new Menu passing in this
         // TODO: set playing to new Playing passing in this
     }
@@ -51,15 +59,15 @@ public class Game implements Runnable {
     public void update() {
         switch (Gamestate.state) {
             case MENU:
-                // TODO: call menu.update()
+                menu.update();
                 break;
             case PLAYING:
-                // TODO: call playing.update()
+                playing.update();
                 break;
             case OPTIONS:
             case QUIT:
             default:
-                // TODO: call System.exit passing in 0
+                System.exit(0);
                 break;
         }
     }
@@ -67,10 +75,10 @@ public class Game implements Runnable {
     public void render(Graphics g) {
         switch (Gamestate.state) {
             case MENU:
-                // TODO: call menu.draw passing in g
+                menu.draw(g);
                 break;
             case PLAYING:
-                // TODO: call playing.draw passing in g
+                playing.draw(g);
                 break;
             default:
                 break;
@@ -123,8 +131,10 @@ public class Game implements Runnable {
     }
 
     public void windowFocusLost() {
-        // TODO: if Gamestate.state is equal to Gamestate.PLAYING
-        // TODO: call playing.getPlayer().resetDirBoolean()
+        if (Gamestate.state == Gamestate.PLAYING) {
+            playing.getPlayer().resetDirBoolean();
+        }
+
     }
 
     public Menu getMenu() {

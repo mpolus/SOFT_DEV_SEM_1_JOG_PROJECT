@@ -146,14 +146,17 @@ public class Player extends Entity {
     }
 
     private void resetInAir() {
-        // TODO: set inAir to false
-        // TODO: set airSpeed to 0
+        inAir = false;
+        airSpeed = 0;
     }
 
     private void updateXPos(float xSpeed) {
-        // TODO: if CanMoveHere(hitbox.x + xSpeed, hitbox.y, hitbox.width, hitbox.height, lvlData)
-        // TODO: add xSpeed to hitbox.x
-        // TODO: else set hitbox.x to GetEntityXPosNextToWall(hitbox, xSpeed)
+        if (CanMoveHere(hitbox.x + xSpeed, hitbox.y, hitbox.width, hitbox.height, lvlData)) {
+            hitbox.x += xSpeed;
+        }else {
+            hitbox.x = GetEntityXPosNextToWall(hitbox, xSpeed);
+        }
+
     }
 
     private void loadAnimations() {
@@ -167,7 +170,7 @@ public class Player extends Entity {
     }
 
     public void loadLvlData(int[][] lvlData) {
-        // TODO: set this lvlData to lvlData
+        this.lvlData = lvlData;
         // TODO: if not IsEntityOnFloor(hitbox, lvlData)
         // TODO: set inAir to true
     }
@@ -215,12 +218,10 @@ public class Player extends Entity {
             this.right = right;
     }
 
-    // TODO: repeat for Up, Down, Right for previous 2
 
 
     public void setJump(boolean jump) {
-        jump = jump;
-        // TODO: set this jump to jump.
+        this.jump = jump;
     }
 
 }
