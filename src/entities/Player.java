@@ -6,8 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static utilz.Constants.PlayerConstants.GetSpriteAmount;
-import static utilz.Constants.PlayerConstants.IDLE;
+import static utilz.Constants.PlayerConstants.*;
 
 public class Player extends Entity {
 
@@ -17,17 +16,27 @@ public class Player extends Entity {
     private boolean moving = false;
     private boolean attacking = false;
     private boolean left, up, right, down;
-    private float playerSpeed = 2.0f;
+    private float playerSpeed = 1.0f * Game.SCALE;
+    private int[][] lvlData;
+    private float xDrawOffset = 21 * Game.SCALE;
+    private float yDrawOffset = 4 * Game.SCALE;
 
-    public Player(float x, float y) {
-        super(x, y);
+    private float airSpeed = 0f;
+    private float gravity = 0.04f * Game.SCALE;
+    private float jumpSpeed = -2.25f * Game.SCALE;
+    private float fallSpeedAfterCollision = 0.5f * Game.SCALE;
+    private boolean inAir = false;
+
+    public Player(float x, float y, int width, int height) {
+        super(x, y, width, height);
         loadAnimations();
+        initHitbox(x, y, (int) (20 * Game.SCALE), (int) (27 * Game.SCALE));
     }
 
     public void update() {
+        updatePos();
         updateAnimationTick();
         setAnimation();
-        updatePos();
     }
 
     public void render(Graphics g) {
@@ -60,6 +69,12 @@ public class Player extends Entity {
             playerAction = IDLE;
         }
 
+        if (inAir) {
+            if (inAir < 0) {
+                playerAction = JUMP;
+            }
+        }
+
         if (attacking){
             playerAction = ATTACK_1;
         }
@@ -68,13 +83,16 @@ public class Player extends Entity {
         }
     }
 
-    public void resetAniTick(){
+    private void resetAniTick(){
         aniTick = 0;
         aniIndex = 0;
     }
 
-    public void updatePos(){
+    private void updatePos(){
         moving = false;
+        if (jump) {
+            jump();
+        }
         if (left && !right){
             x -= playerSpeed;
             moving = true;
