@@ -1,51 +1,46 @@
 package entities;
 
-import static utilz.Constants.PlayerConstants.*;
-import static utilz.HelpMethods.*;
-
-import java.awt.Graphics;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
-import main.Game;
-import utilz.LoadSave;
+import static utilz.Constants.PlayerConstants.GetSpriteAmount;
+import static utilz.Constants.PlayerConstants.IDLE;
 
 public class Player extends Entity {
+
     private BufferedImage[][] animations;
     private int aniTick, aniIndex, aniSpeed = 25;
     private int playerAction = IDLE;
     private boolean moving = false;
     private boolean attacking = false;
-    private boolean left, up, right, down, jump;
-    private float playerSpeed = 1.0f * Game.SCALE;
-    private int[][] lvlData;
-    private float xDrawOffset = 21 * Game.SCALE;
-    private float yDrawOffset = 4 * Game.SCALE;
+    private boolean left, up, right, down;
+    private float playerSpeed = 2.0f;
 
-    // Jumping / Gravity
-    private float airSpeed = 0f;
-    private float gravity = 0.04f * Game.SCALE;
-    private float jumpSpeed = -2.25f * Game.SCALE;
-    private float fallSpeedAfterCollision = 0.5f * Game.SCALE;
-    private boolean inAir = false;
-
-    public Player(float x, float y, int width, int height) {
-        super(x, y, width, height);
+    public Player(float x, float y) {
+        super(x, y);
         loadAnimations();
-        initHitbox( x, y, (int) (20 * Game.SCALE), (int) (27 * Game.SCALE));
-
     }
 
     public void update() {
-        updatePos();
         updateAnimationTick();
         setAnimation();
+        updatePos();
     }
 
     public void render(Graphics g) {
-        g.drawImage(animations[playerAction][aniIndex], (int)(hitbox.x - xDrawOffset), (int)(hitbox.y - YDrawOffset), width, height, null);
+        g.drawImage(
+                animations[playerAction][aniIndex],
+                (int) x,
+                (int) y,
+                256,
+                160,
+                null);
     }
 
-    private void updateAnimationTick() {
+    public void updateAnimationTick() {
         aniTick++;
         if (aniTick >= aniSpeed) {
             aniTick = 0;
@@ -57,171 +52,109 @@ public class Player extends Entity {
         }
     }
 
-    private void setAnimation() {
+    public void setAnimation() {
         int startAni = playerAction;
-        if (moving)
+        if (moving) {
             playerAction = RUNNING;
-        else
+        } else {
             playerAction = IDLE;
-        if (inAir) {
-            if (airSpeed < 0)
-                playerAction = JUMP;
-        }else
-            playerAction = FALLING
+        }
 
-
-        // TODO: if inAir
-        // TODO: if airSpeed is less than 0
-        // TODO: set playerAction to JUMP
-        // TODO: else set playerAction to FALLING
-
-
-        if (attacking)
+        if (attacking){
             playerAction = ATTACK_1;
-
-        if (startAni != playerAction)
+        }
+        if (startAni != playerAction) {
             resetAniTick();
+        }
     }
 
-    private void resetAniTick() {
+    public void resetAniTick(){
         aniTick = 0;
         aniIndex = 0;
     }
 
-    private void updatePos() {
+    public void updatePos(){
         moving = false;
-        if (jump) {
-            jump();
+        if (left && !right){
+            x -= playerSpeed;
+            moving = true;
+        }else if(right && !left){
+            x += playerSpeed;
+            moving = true;
         }
-        if (left != right != inAir) {
-            return;
+        if (up && !down){
+            y -= playerSpeed;
+            moving = true;
         }
-
-        // TODO: if jump
-        // TODO: call jump()
-        // TODO: if not left and not right and not inAir
-        // TODO: return
-
-
-        float xSpeed = 0;
-        // create a float called xSpeed and set to 0
-        if (left) {
-            xSpeed -= playerSpeed;
+        else if (down && !up){
+            y += playerSpeed;
+            moving = true;
         }
-        if (right) {
-            xSpeed += playerSpeed;
-        }
-        // TODO: if left subtract playerSpeed from xSpeed
-        // TODO: if right add playerSpeed to xSpeed
-
-
-
-
-        // TODO: if not inAir
-        // TODO: if not IsEntityOnFloor(hitbox, lvlData)
-        // TODO: set inAir to true
-
-
-        // TODO: if inAir
-        // TODO: if CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)
-        // TODO: add airSpeed to hitbox.y
-        // TODO: add gravity to airSpeed
-        // TODO: updateXPos
-        // TODO: else
-        // TODO: set hitbox.y to GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed)
-        // TODO: if airSpeed is positive
-        // TODO: call resetInAir()
-        // TODO: else
-        // TODO: set airSpeed to fallSpeedAfterCollision
-        // TODO: done with else call updateXPos(xSpeed)
-        // TODO: else (based off of if inAir)
-        // TODO: call updateXPos(xSpeed)
-        // TODO: set moving to true
-    }
-
-    private void jump() {
-        // TODO: if inAir then return
-        // TODO: set inAir to true
-        // TODO: set airSpeed to jumpSpeed
-    }
-
-    private void resetInAir() {
-        inAir = false;
-        airSpeed = 0;
-    }
-
-    private void updateXPos(float xSpeed) {
-        if (CanMoveHere(hitbox.x + xSpeed, hitbox.y, hitbox.width, hitbox.height, lvlData)) {
-            hitbox.x += xSpeed;
-        }else {
-            hitbox.x = GetEntityXPosNextToWall(hitbox, xSpeed);
-        }
-
     }
 
     private void loadAnimations() {
-        // TODO: create a BufferedImage called img and set to LoadSvae.GetSpriteAtlas(LoadSave.PLAYER_ATLAS)
+        InputStream is = getClass().getResourceAsStream("/player_sprites.png");
+        try {
+            BufferedImage img = ImageIO.read(is);
 
-        animations = new BufferedImage[9][6];
-        for (int row = 0; row < animations.length; row++)
-            for (int col = 0; col < animations[row].length; col++)
-                animations[row][col] = img.getSubimage(col * 64, row * 40, 64, 40);
+            animations = new BufferedImage[9][6];
+            for (int row = 0; row < animations.length; row++)
+                for (int col = 0; col < animations[row].length; col++)
+                    animations[row][col] = img.getSubimage(col * 64, row * 40, 64, 40);
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void loadLvlData(int[][] lvlData) {
-        this.lvlData = lvlData;
-        // TODO: if not IsEntityOnFloor(hitbox, lvlData)
-        // TODO: set inAir to true
-    }
-
-    public void resetDirBooleans() {
+    public void resetDirBooleans(){
         left = false;
         right = false;
         up = false;
         down = false;
     }
 
-    public void setAttacking(boolean attacking) {
+    public void setAttacking(boolean attacking){
         this.attacking = attacking;
     }
 
-    public boolean isLeft() {
+    public boolean isLeft(){
         return left;
     }
 
-    public void setLeft(boolean left) {
+    public void setLeft(boolean left){
         this.left = left;
     }
 
-    public boolean isUp() {
+    public boolean isUp(){
         return up;
     }
 
-    public void setUp(boolean up) {
+    public void setUp(boolean up){
         this.up = up;
     }
 
-    public boolean isDown() {
+    public boolean isDown(){
         return down;
     }
 
-    public void setDown(boolean down) {
+    public void setDown(boolean down){
         this.down = down;
     }
 
-    public boolean isRight() {
+    public void setRight(boolean right){
+        this.right = right;
+    }
+
+    public boolean isRight(){
         return right;
     }
 
-    public void setRight(boolean right) {
-            this.right = right;
-    }
-
-
-
-    public void setJump(boolean jump) {
-        this.jump = jump;
-    }
 
 }
