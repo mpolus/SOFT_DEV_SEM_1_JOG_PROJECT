@@ -1,21 +1,21 @@
 package entities;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-
 import static utilz.Constants.PlayerConstants.*;
+import static utilz.HelpMethods.*;
+
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
+import main.Game;
+import utilz.LoadSave;
 
 public class Player extends Entity {
-
     private BufferedImage[][] animations;
     private int aniTick, aniIndex, aniSpeed = 25;
     private int playerAction = IDLE;
     private boolean moving = false;
     private boolean attacking = false;
-    private boolean left, up, right, down;
+    private boolean left, up, right, down, jump;
     private float playerSpeed = 1.0f * Game.SCALE;
     private int[][] lvlData;
     private float xDrawOffset = 21 * Game.SCALE;
@@ -26,6 +26,7 @@ public class Player extends Entity {
     private float jumpSpeed = -2.25f * Game.SCALE;
     private float fallSpeedAfterCollision = 0.5f * Game.SCALE;
     private boolean inAir = false;
+
 
     public Player(float x, float y, int width, int height) {
         super(x, y, width, height);
@@ -70,8 +71,10 @@ public class Player extends Entity {
         }
 
         if (inAir) {
-            if (inAir < 0) {
+            if (airSpeed < 0) {
                 playerAction = JUMP;
+            }else {
+                playerAction = FALLING;
             }
         }
 
@@ -110,25 +113,83 @@ public class Player extends Entity {
         }
     }
 
+    private void updatePos() {
+        moving = false;
+
+        // TODO: if jump
+        // TODO: call jump()
+
+        // TODO: if not left and not right and not inAir
+        // TODO: return
+
+        // create a float called xSpeed and set to 0
+
+        // TODO: if left subtract playerSpeed from xSpeed
+
+        // TODO: if right add playerSpeed to xSpeed
+
+
+        // TODO: if not inAir
+        // TODO: if not IsEntityOnFloor(hitbox, lvlData)
+        // TODO: set inAir to true
+
+
+        // TODO: if inAir
+        // TODO: if CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)
+        // TODO: add airSpeed to hitbox.y
+        // TODO: add gravity to airSpeed
+        // TODO: updateXPos
+        // TODO: else
+        // TODO: set hitbox.y to GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed)
+        // TODO: if airSpeed is positive
+        // TODO: call resetInAir()
+        // TODO: else
+        // TODO: set airSpeed to fallSpeedAfterCollision
+        // TODO: call updateXPos(xSpeed)
+        // TODO: else (based off of if inAir)
+        // TODO: call updateXPos(xSpeed)
+        // TODO: set moving to true
+    }
+
+    private void jump() {
+        // TODO: if inAir
+        // TODO: then return
+        // TODO: set inAir to true
+        // TODO: set airSpeed to jumpSpeed
+    }
+
+    private void resetInAir() {
+        // TODO: set inAir to false
+        // TODO: set airSpeed to 0
+    }
+
+    private void updateXPos(float xSpeed) {
+        // TODO: if CanMoveHere(hitbox.x + xSpeed, hitbox.y, hitbox.width, hitbox.height, lvlData)
+        // TODO: add xSpeed to hitbox.x
+        // TODO: else
+        // TODO: set hitbox.x to GetEntityXPosNextToWall(hitbox, xSpeed)
+    }
+
+
+
+
+
+
+
     private void loadAnimations() {
-        InputStream is = getClass().getResourceAsStream("/player_sprites.png");
-        try {
-            BufferedImage img = ImageIO.read(is);
+        // TODO: create a BufferedImage called img and set to LoadSvae.GetSpriteAtlas(LoadSave.PLAYER_ATLAS)
 
-            animations = new BufferedImage[9][6];
-            for (int row = 0; row < animations.length; row++)
-                for (int col = 0; col < animations[row].length; col++)
-                    animations[row][col] = img.getSubimage(col * 64, row * 40, 64, 40);
+        animations = new BufferedImage[9][6];
+        for (int row = 0; row < animations.length; row++)
+            for (int col = 0; col < animations[row].length; col++)
+                animations[row][col] = img.getSubimage(col * 64, row * 40, 64, 40);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    }
+
+    public void loadLvlData(int[][] lvlData) {
+        // TODO: set this lvlData to lvlData
+        // TODO: if not IsEntityOnFloor(hitbox, lvlData)
+        // TODO: set inAir to true
     }
 
     public void resetDirBooleans(){
@@ -174,5 +235,8 @@ public class Player extends Entity {
         return right;
     }
 
+    public void setJump(boolean jump) {
+        this.jump = jump;
+    }
 
 }
