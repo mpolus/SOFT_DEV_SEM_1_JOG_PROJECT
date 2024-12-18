@@ -27,11 +27,11 @@ public class MenuButton {
 	}
 
 	private void initBounds() {
-		bounds = newRectangle(xPos - xOffsetCenter, yPos, B_WIDTH, B_HEIGHT);
+		bounds = new Rectangle(xPos - xOffsetCenter, yPos, B_WIDTH, B_HEIGHT);
 	}
 
 	private void loadImgs() {
-		img = new BufferedImage[3];
+		imgs = new BufferedImage[3];
 		BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.MENU_BUTTONS);
 		for (int i = 0; i < imgs.length; i++)
 			imgs[i] = temp.getSubimage(i * B_WIDTH_DEFAULT, rowIndex * B_HEIGHT_DEFAULT, B_WIDTH_DEFAULT, B_HEIGHT_DEFAULT);
