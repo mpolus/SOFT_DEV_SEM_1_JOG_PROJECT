@@ -91,93 +91,78 @@ public class Player extends Entity {
         aniIndex = 0;
     }
 
-    private void updatePos(){
+    private void updatePos() {
         moving = false;
         if (jump) {
             jump();
         }
-        if (left && !right){
-            x -= playerSpeed;
-            moving = true;
-        }else if(right && !left){
-            x += playerSpeed;
-            moving = true;
+        float xSpeed = 0;
+        if (!left && !right && !inAir) {
+            return;
+            xSpeed = 0;
+            if (left) {
+                xSpeed -= playerSpeed;
+            }
+            if (right) {
+                xSpeed += playerSpeed;
+            }
+
+            if (!inAir) {
+                if (!IsEntityOnFloor(hitbox, lvlData)) {
+                    inAir = true;
+                }
+            }
+
+            if (inAir) {
+                if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
+                    hitbox.y += airSpeed;
+                    airSpeed += gravity;
+                    updateXPos(xSpeed);
+                } else {
+                    hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed);
+                }
+                if (airSpeed > 0) {
+                    resetInAir();
+                } else {
+                    airSpeed = fallSpeedAfterCollision;
+                    updateXPos(xSpeed);
+                }
+            }
+        } else {
+            updateXPos(xSpeed);
         }
-        if (up && !down){
-            y -= playerSpeed;
-            moving = true;
-        }
-        else if (down && !up){
-            y += playerSpeed;
-            moving = true;
-        }
-    }
-
-    private void updatePos() {
-        moving = false;
-
-        // TODO: if jump
-        // TODO: call jump()
-
-        // TODO: if not left and not right and not inAir
-        // TODO: return
-
-        // create a float called xSpeed and set to 0
-
-        // TODO: if left subtract playerSpeed from xSpeed
-
-        // TODO: if right add playerSpeed to xSpeed
+        moving = true;
 
 
-        // TODO: if not inAir
-        // TODO: if not IsEntityOnFloor(hitbox, lvlData)
-        // TODO: set inAir to true
-
-
-        // TODO: if inAir
-        // TODO: if CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)
-        // TODO: add airSpeed to hitbox.y
-        // TODO: add gravity to airSpeed
-        // TODO: updateXPos
-        // TODO: else
-        // TODO: set hitbox.y to GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed)
-        // TODO: if airSpeed is positive
-        // TODO: call resetInAir()
-        // TODO: else
-        // TODO: set airSpeed to fallSpeedAfterCollision
-        // TODO: call updateXPos(xSpeed)
-        // TODO: else (based off of if inAir)
-        // TODO: call updateXPos(xSpeed)
-        // TODO: set moving to true
     }
 
     private void jump() {
-        // TODO: if inAir
-        // TODO: then return
-        // TODO: set inAir to true
-        // TODO: set airSpeed to jumpSpeed
+        if (inAir){
+            return;
+            inAir = true;
+            airSpeed = jumpSpeed;
+        }
     }
 
     private void resetInAir() {
-        // TODO: set inAir to false
-        // TODO: set airSpeed to 0
+        inAir = false;
+        airSpeed = 0;
     }
 
     private void updateXPos(float xSpeed) {
-        // TODO: if CanMoveHere(hitbox.x + xSpeed, hitbox.y, hitbox.width, hitbox.height, lvlData)
-        // TODO: add xSpeed to hitbox.x
-        // TODO: else
-        // TODO: set hitbox.x to GetEntityXPosNextToWall(hitbox, xSpeed)
+        if (CanMoveHere(hitbox.x + xSpeed, hitbox.y, hitbox.width, hitbox.height, lvlData)){
+            hitbox.x += xSpeed;
+        }else{
+            hitbox.x = GetEntityXPosNextToWall(hitbox, xSpeed);
+
+        }
     }
-
-
-
 
 
 
 
     private void loadAnimations() {
-        // TODO: create a BufferedImage called img and set to LoadSvae.GetSpriteAtlas(LoadSave.PLAYER_ATLAS)
+        BufferedImage img = LoadSvae.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
 
         animations = new BufferedImage[9][6];
         for (int row = 0; row < animations.length; row++)
@@ -187,9 +172,10 @@ public class Player extends Entity {
     }
 
     public void loadLvlData(int[][] lvlData) {
-        // TODO: set this lvlData to lvlData
-        // TODO: if not IsEntityOnFloor(hitbox, lvlData)
-        // TODO: set inAir to true
+        this.lvlData = lvlData;
+        if (!IsEntityOnFloor(hitbox, lvlData)){
+            inAir = true;
+        }
     }
 
     public void resetDirBooleans(){

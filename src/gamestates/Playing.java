@@ -11,9 +11,6 @@ import main.Game;
 public class Playing extends State implements Statemethods {
 	private Player player;
 	private LevelManager levelManager;
-	// TODO: all fields are private
-	// TODO: create a Player called player
-	// TODO: create a LevelManager called levelManager
 
 	public Playing(Game game) {
 		super(game);
@@ -28,19 +25,19 @@ public class Playing extends State implements Statemethods {
 
 	@Override
 	public void update() {
-		levelManger.update();
+		levelManager.update();
 		player.update();
 	}
 
 	@Override
 	public void draw(Graphics g) {
-		levelManger.draw(g);
+		levelManager.draw(g);
 		player.render(g);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getButton() = MouseEvent.Button1) {
+		if (e.getButton() == MouseEvent.BUTTON1) {
 			player.setAttacking(true);
 		}
 

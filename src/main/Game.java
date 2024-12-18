@@ -19,19 +19,15 @@ public class Game implements Runnable {
     private Playing playing;
     private Menu menu;
 
+    public static final int TILES_DEFAULT_SIZE = 32;
+    public static final float SCALE = 2f;
+    public static final int TILES_IN_WIDTH = 26;
+    public static final int TILES_IN_HEIGHT = 14;
+    public static final int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
+    public static final int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
+    public static final  int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
 
-    // TODO: create a private field of type Playing named playing.
-    // TODO: create a private field of type Menu named menu
 
-
-    // TODO: create public final static fields of the following name and value (these are some extra constants)
-    // TODO: int TILES_DEFAULT_SIZE set to 32
-    // TODO: float SCALE set to 2f
-    // TODO: int TILES_IN_WIDTH set to 26
-    // TODO: int TILES_IN_HEIGHT set to 14
-    // TODO: int TILES_SIZE set to (int) (TILES_DEFAULT_SIZE * SCALE)
-    // TODO: int GAME_WIDTH set to TILES_SIZE * TILES_IN_WIDTH
-    // TODO: int GAME_HEIGHT set to TILES_SIZE * TILE_IN_HEIGHT
 
     public Game() {
         initClasses();
@@ -47,8 +43,7 @@ public class Game implements Runnable {
     private void initClasses() {
         menu = new Menu(this);
         playing = new Playing(this);
-        // TODO: set menu to new Menu passing in this
-        // TODO: set playing to new Playing passing in this
+
     }
 
     private void startGameLoop() {
@@ -132,7 +127,7 @@ public class Game implements Runnable {
 
     public void windowFocusLost() {
         if (Gamestate.state == Gamestate.PLAYING) {
-            playing.getPlayer().resetDirBoolean();
+            playing.getPlayer().resetDirBooleans();
         }
 
     }

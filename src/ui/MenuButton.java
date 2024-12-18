@@ -9,13 +9,12 @@ import utilz.LoadSave;
 import static utilz.Constants.UI.Buttons.*;
 
 public class MenuButton {
-	// TODO: create private fields
-	// TODO: int xPos, yPos, rowIndex, index
-	// TODO: xOffsetCenter set to B_WIDTH / 2
-	// TODO: Gamestate called state
-	// TODO: BufferedImage[] imgs
-	// TODO: boolean mouseOver, mousePressed
-	// TODO: Rectangle bounds
+	private int xPos, yPos, rowIndex, index;
+	private int xOffsetCenter = B_WIDTH / 2;
+	private Gamestate state;
+	private BufferedImage[] imgs;
+	private boolean mouseOver, mousePressed;
+	private Rectangle bounds;
 
 	public MenuButton(int xPos, int yPos, int rowIndex, Gamestate state) {
 		this.xPos = xPos;
@@ -24,12 +23,7 @@ public class MenuButton {
 		this.state = state;
 		loadImgs();
 		initBounds();
-		// TODO: set this xPos to xPos
-		// TODO: set this yPos to yPos
-		// TODO: set this rowIndex to rowIndex
-		// TODO: set this state to state
-		// TODO: call loadImgs()
-		// TODO: call initBounds()
+
 	}
 
 	private void initBounds() {
@@ -37,8 +31,8 @@ public class MenuButton {
 	}
 
 	private void loadImgs() {
-		// TODO: set img to new BufferedImage[3];
-		// TODO: create a BufferedImage called temp and set to LoadSave.GetSpriteAtlas(LoadSave.MENU_BUTTONS)
+		img = new BufferedImage[3];
+		BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.MENU_BUTTONS);
 		for (int i = 0; i < imgs.length; i++)
 			imgs[i] = temp.getSubimage(i * B_WIDTH_DEFAULT, rowIndex * B_HEIGHT_DEFAULT, B_WIDTH_DEFAULT, B_HEIGHT_DEFAULT);
 	}
@@ -56,12 +50,7 @@ public class MenuButton {
 		if (isMousePressed()) {
 			index = 2;
 		}
-		// TODO: set index to 0
-		// TODO if mouseOver
-		// TODO: set index to 1
-		// TODO: end of if statement
-		// TODO: if mousePressed
-		// TODO: set index to 2
+
 	}
 
 	public boolean isMouseOver() {
@@ -89,7 +78,8 @@ public class MenuButton {
 	}
 
 	public void resetBools() {
-		mouseOver, mousePressed = false;
+		mouseOver = false;
+		mousePressed = false;
 	}
 
 }
